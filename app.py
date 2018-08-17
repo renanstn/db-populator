@@ -30,6 +30,7 @@ def main():
     print("Bem vindo ao populador de banco de dados!")
     quantidade = int(input("Quantas pessoas pretende gerar?\n"))
     gerados = generatePeople(quantidade)
+    [print(i['nome']) for i in gerados]
 
 if __name__ == '__main__':
     main()
