@@ -1,4 +1,4 @@
-import requests, random, pprint
+import requests, random
 
 def generatePeople(quantidade):
     """ Busca pessoas no 4devs e retorna um dict com elas. """
