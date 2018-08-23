@@ -1,4 +1,10 @@
-import requests, random
+import requests, random, pymysql.cursors, configparser
+
+def getConfig():
+    """ Pega os dados do config """
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    return config['db']
 
 def generatePeople(quantidade):
     """ Busca pessoas no 4devs e retorna um dict com elas. """
@@ -21,16 +27,33 @@ def generatePeople(quantidade):
 
     return gerados
 
-def saveData(data):
+def saveData(table, data):
     """ Insere os dados no banco de dados. """
-    pass
+
+    db = getConfig()
+
+    conexao = pymysql.connect(
+        host = db['host'],
+        user = db['user'],
+        password = db['password'],
+        db = db['db'],
+        cursorclass=pymysql.cursors.DictCursor
+    )
+    cursor = conexao.cursor()
+    sql = "INSERT INTO {} (nome) VALUES (%s)".format(table)
+    cursor.execute(sql, (data[0]['nome']))
+    conexao.commit()
+    conexao.close()
 
 def main():
 
     print("Bem vindo ao populador de banco de dados!")
+    tabela = input("Qual tabela deseja popular?\n")
     quantidade = int(input("Quantas pessoas pretende gerar?\n"))
     gerados = generatePeople(quantidade)
     [print(i['nome']) for i in gerados]
+
+    saveData(tabela, gerados)
 
 if __name__ == '__main__':
     main()
