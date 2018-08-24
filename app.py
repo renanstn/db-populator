@@ -45,12 +45,37 @@ def saveData(table, data):
     conexao.commit()
     conexao.close()
 
+def getColumnsOfTable(table):
+    """ Retorna um array com os nomes das colunas de uma tabela. """
+
+    db = getConfig()
+
+    conexao = pymysql.connect(
+        host = db['host'],
+        user = db['user'],
+        password = db['password'],
+        db = db['db'],
+        cursorclass=pymysql.cursors.DictCursor
+    )
+    cursor = conexao.cursor()
+
+    sql = "SHOW COLUMNS FROM {}".format(table)
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    colunas = [column.get('Field') for column in result]
+    return colunas
+
 def main():
 
+    print(getColumnsOfTable('usuario'))
+    return
+    
     print("Bem vindo ao populador de banco de dados!")
-    tabela = input("Qual tabela deseja popular?\n")
-    quantidade = int(input("Quantas pessoas pretende gerar?\n"))
-    gerados = generatePeople(quantidade)
+
+    tabela      = input("Qual tabela deseja popular?\n")
+    quantidade  = int(input("Quantas pessoas pretende gerar?\n"))
+    gerados     = generatePeople(quantidade)
+
     [print(i['nome']) for i in gerados]
 
     saveData(tabela, gerados)
