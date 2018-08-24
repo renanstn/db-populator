@@ -67,18 +67,21 @@ def getColumnsOfTable(table):
 
 def main():
 
-    print(getColumnsOfTable('usuario'))
-    return
-    
     print("Bem vindo ao populador de banco de dados!")
 
-    tabela      = input("Qual tabela deseja popular?\n")
-    quantidade  = int(input("Quantas pessoas pretende gerar?\n"))
-    gerados     = generatePeople(quantidade)
+    tabela = input("Qual tabela deseja popular?\n")
+    colunas = getColumnsOfTable(tabela)
+    print("Colunas da tabela:")
+    [print(coluna) for coluna in colunas]
+    campos = input("Digite as colunas que deseja popular, separadas por virgula:\n")
+    campos = campos.replace(" ", "")
+    colunasSelecionadas = campos.split(",")
 
-    [print(i['nome']) for i in gerados]
+    # quantidade  = int(input("Quantas pessoas pretende gerar?\n"))
+    # gerados     = generatePeople(quantidade)
+    # [print(i['nome']) for i in gerados]
 
-    saveData(tabela, gerados)
+    # saveData(tabela, gerados)
 
 if __name__ == '__main__':
     main()
