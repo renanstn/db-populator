@@ -3,7 +3,7 @@
 import requests, random, pymysql.cursors, configparser
 from tkinter import *
 
-class App:
+class DbPopulator:
 
     def __init__(self):
         """ Cria a conexão com o banco de dados """
@@ -15,25 +15,26 @@ class App:
             user = db['user'],
             password = db['password'],
             db = db['db'],
-            cursorclass=pymysql.cursors.DictCursor
+            cursorclass = pymysql.cursors.DictCursor
         )
+
         self.cursor = self.conexao.cursor()
 
     def setTable(self, table):
         """ Seta uma tabela para ser populada. """
-        
+
         # Verificar se a tabela passada existe
         sql = "SHOW TABLES LIKE '{}'".format(table)
         self.cursor.execute(sql)
         result = self.cursor.fetchone()
-        if len(result != 0):
+        if result:
             self.table = table
         else:
             print("A tabela digitada não existe no banco de dados.")
-            return False
 
     def getConfig(self):
         """ Pega os dados do config """
+
         config = configparser.ConfigParser()
         config.read('config.ini')
         return config['db']
@@ -75,24 +76,3 @@ class App:
         result = self.cursor.fetchall()
         colunas = [column.get('Field') for column in result]
         return colunas
-
-def main():
-
-    app = App()
-
-    print("Bem vindo ao populador de banco de dados!")
-
-    tabela = input("Qual tabela deseja popular?\n")
-    app.setTable(tabela)
-    colunas = app.getColumnsOfTable()
-    print("Colunas da tabela:")
-    [print(coluna) for coluna in colunas]
-
-    # quantidade  = int(input("Quantas pessoas pretende gerar?\n"))
-    # gerados     = generatePeople(quantidade)
-    # [print(i['nome']) for i in gerados]
-
-    # saveData(tabela, gerados)
-
-if __name__ == '__main__':
-    main()
