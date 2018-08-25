@@ -5,6 +5,20 @@ from tkinter import *
 
 class DbPopulator:
 
+    params = []
+    types = [
+        'simpleName',
+        'completName',
+        'randomNumber',
+        'randomNumberInRange',
+        'phoneNumber',
+        'celNumber',
+        'email',
+        'dateTime',
+        'date',
+        'time',
+    ]
+
     def __init__(self):
         """ Cria a conexão com o banco de dados """
 
@@ -39,32 +53,26 @@ class DbPopulator:
         config.read('config.ini')
         return config['db']
 
-    def generatePeople(self, quantidade):
-        """ Busca pessoas no 4devs e retorna um dict com elas. """
+    def generatePeople(self):
+        """ Busca uma pessoa no 4devs e retorna um dict com ela. """
 
-        gerados = []
+        idade = random.randint(18, 90)
+        sexo  = random.choice(['H', 'M'])
 
-        for i in range(quantidade):
+        pessoa = requests.post('https://www.4devs.com.br/ferramentas_online.php', data = {
+            'acao'      : 'gerar_pessoa',
+            'idade'     : idade,
+            'pontuacao' : 'S',
+            'sexo'      : sexo
+        })
 
-            idade   = random.randint(18, 90)
-            sexo    = random.choice(['H', 'M'])
-
-            pessoa = requests.post('https://www.4devs.com.br/ferramentas_online.php', data = {
-                'acao'      : 'gerar_pessoa',
-                'idade'     : idade,
-                'pontuacao' : 'S',
-                'sexo'      : sexo
-            })
-
-            gerados.append(pessoa.json())
-
-        return gerados
+        return pessoa.json()
 
     def saveData(self, data):
         """ Insere os dados no banco de dados. """
 
         sql = "INSERT INTO {} (nome) VALUES (%s)".format(self.table)
-        self.cursor.execute(sql, (data[0]['nome']))
+        self.cursor.execute(sql)
         self.conexao.commit()
         # self.conexao.close()
 
@@ -76,3 +84,37 @@ class DbPopulator:
         result = self.cursor.fetchall()
         colunas = [column.get('Field') for column in result]
         return colunas
+
+    def setColumnType(self, column, type):
+        """ Seta um campo e um tipo de dado para ser preenchido na tabela. """
+
+        # Verificar se a coluna passada existe:
+        if not column in self.getColumnsOfTable():
+            print('Coluna inválida')
+            return False
+        # Verificar se o tipo passado é válido:
+        if not type in self.types:
+            print('Tipo inválido')
+            return False
+
+        self.params.append({column : type})
+
+    def generateValue(self, type):
+        """ Recebe um tipo, e gera um valor aleatório de acordo com o mesmo. """
+
+        if type == 'simpleName':
+            return self.generatePeople()['nome'].split(" ")[0]
+        elif type == 'completeName':
+            return self.generatePeople()['nome']
+        elif type == 'randomNumber':
+            return random.randint(1, 1000)
+        elif type == 'randomNumberInRange':
+            pass
+        elif type == 'phoneNumber':
+            return self.generatePeople()['telefone_fixo']
+        elif type == 'celNumber':
+            return self.generatePeople()['celular']
+        elif type == 'email':
+            return self.generatePeople()['email']
+        elif type == 'date':
+            return self.generatePeople()['data_nasc']
