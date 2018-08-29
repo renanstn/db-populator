@@ -24,3 +24,10 @@ Populador de banco de dados
 * Time
 * Hash
 * Números coletados em outra tabela
+
+Necessário um arquivo config.ini com as seguintes informações:
+```[db]
+host=localhost
+user=root
+password=
+db=teste```
