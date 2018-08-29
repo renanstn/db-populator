@@ -5,8 +5,9 @@ from tkinter import *
 
 class DbPopulator:
 
-    params = {}
-    types = [
+    params  = {} # {'column' : 'type'}
+    mass    = [] # {'column' : 'value'}
+    types   = [
         'simpleName',
         'completeName',
         'randomNumber',
@@ -17,7 +18,7 @@ class DbPopulator:
         'dateTime',
         'date',
         'time',
-    ]
+    ] # Lista de tipos de dados que podem ser gerados pela classe.
 
     def __init__(self):
         """ Cria a conexão com o banco de dados """
@@ -68,7 +69,7 @@ class DbPopulator:
 
         return pessoa.json()
 
-    def saveData(self, data):
+    def saveData(self):
         """ Insere os dados no banco de dados. """
 
         sql = "INSERT INTO {} (nome) VALUES (%s)".format(self.table)
@@ -121,8 +122,11 @@ class DbPopulator:
         elif type == 'date':
             return pessoa['data_nasc']
 
-    def generateMass(self, ammount):
+    def generateMass(self, lines):
         """ Gera a quantidade de massa informada de acordo com os parâmetros """
-
-        for param in self.params.keys():
-            self.params[param]
+        
+        for i in range(lines):
+            for col in self.params:
+                self.mass.append([{col : self.generateValue(self.params[col])}])
+        
+        print(self.mass)
