@@ -5,10 +5,10 @@ from tkinter import *
 
 class DbPopulator:
 
-    params = []
+    params = {}
     types = [
         'simpleName',
-        'completName',
+        'completeName',
         'randomNumber',
         'randomNumberInRange',
         'phoneNumber',
@@ -97,24 +97,32 @@ class DbPopulator:
             print('Tipo inválido')
             return False
 
-        self.params.append({column : type})
+        self.params[column] = type
 
     def generateValue(self, type):
         """ Recebe um tipo, e gera um valor aleatório de acordo com o mesmo. """
 
+        pessoa = self.generatePeople()
+
         if type == 'simpleName':
-            return self.generatePeople()['nome'].split(" ")[0]
+            return pessoa['nome'].split(" ")[0]
         elif type == 'completeName':
-            return self.generatePeople()['nome']
+            return pessoa['nome']
         elif type == 'randomNumber':
             return random.randint(1, 1000)
         elif type == 'randomNumberInRange':
             pass
         elif type == 'phoneNumber':
-            return self.generatePeople()['telefone_fixo']
+            return pessoa['telefone_fixo']
         elif type == 'celNumber':
-            return self.generatePeople()['celular']
+            return pessoa['celular']
         elif type == 'email':
-            return self.generatePeople()['email']
+            return pessoa['email']
         elif type == 'date':
-            return self.generatePeople()['data_nasc']
+            return pessoa['data_nasc']
+
+    def generateMass(self, ammount):
+        """ Gera a quantidade de massa informada de acordo com os parâmetros """
+
+        for param in self.params.keys():
+            self.params[param]

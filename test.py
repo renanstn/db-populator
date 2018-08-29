@@ -12,8 +12,13 @@ def main():
     # Função que gera as pessoas
     # gerados = teste.generatePeople(4)
     # [print(i['nome']) for i in gerados]
-    teste.setColumnType('id', 'simpleName')
-    print(teste.generateValue('phoneNumber'))
+    # print(teste.generateValue('phoneNumber'))
+    # print(teste.generateValue('completeName'))
+    # print(teste.generateValue('date'))
+    teste.setColumnType('nome', 'completeName')
+    teste.setColumnType('email', 'email')
+    teste.setColumnType('numero', 'randomNumber')
+    teste.generateMass(1)
 
 if __name__ == '__main__':
     main()
