@@ -30,4 +30,5 @@ Necessário um arquivo config.ini com as seguintes informações:
 host=localhost
 user=root
 password=
-db=teste```
+db=teste
+```
