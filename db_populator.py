@@ -6,7 +6,7 @@ from tkinter import *
 class DbPopulator:
 
     params  = {} # {'column' : 'type'}
-    mass    = [] # {'column' : 'value'}
+    mass    = {} # {'column' : 'value'}
     types   = [
         'simpleName',
         'completeName',
@@ -72,7 +72,12 @@ class DbPopulator:
     def saveData(self):
         """ Insere os dados no banco de dados. """
 
-        sql = "INSERT INTO {} (nome) VALUES (%s)".format(self.table)
+        listKeys = list(self.mass.keys())
+        listValues = list(self.mass.values())
+        columns = ", ".join(listKeys)
+        values = ", ".join(listValues)
+
+        sql = "INSERT INTO {} ({}) VALUES ({})".format(self.table, columns, values)
         self.cursor.execute(sql)
         self.conexao.commit()
         # self.conexao.close()
@@ -124,9 +129,8 @@ class DbPopulator:
 
     def generateMass(self, lines):
         """ Gera a quantidade de massa informada de acordo com os parâmetros """
-        
+
         for i in range(lines):
-            for col in self.params:
-                self.mass.append([{col : self.generateValue(self.params[col])}])
-        
-        print(self.mass)
+            for param in self.params:
+                self.mass[param] = "'{}'".format(str(self.generateValue(self.params[param])))
+            self.saveData()

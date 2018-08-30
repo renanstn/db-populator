@@ -18,7 +18,8 @@ def main():
     teste.setColumnType('nome', 'completeName')
     teste.setColumnType('email', 'email')
     teste.setColumnType('numero', 'randomNumber')
-    teste.generateMass(5)
+    teste.setColumnType('telefone', 'phoneNumber')
+    teste.generateMass(10)
 
 if __name__ == '__main__':
     main()
