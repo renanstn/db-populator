@@ -108,29 +108,29 @@ class DbPopulator:
     def generateValue(self, type):
         """ Recebe um tipo, e gera um valor aleatório de acordo com o mesmo. """
 
-        pessoa = self.generatePeople()
-
         if type == 'simpleName':
-            return pessoa['nome'].split(" ")[0]
+            return self.pessoa['nome'].split(" ")[0]
         elif type == 'completeName':
-            return pessoa['nome']
+            return self.pessoa['nome']
         elif type == 'randomNumber':
             return random.randint(1, 1000)
         elif type == 'randomNumberInRange':
             pass
         elif type == 'phoneNumber':
-            return pessoa['telefone_fixo']
+            return self.pessoa['telefone_fixo']
         elif type == 'celNumber':
-            return pessoa['celular']
+            return self.pessoa['celular']
         elif type == 'email':
-            return pessoa['email']
+            return self.pessoa['email']
         elif type == 'date':
-            return pessoa['data_nasc']
+            return self.pessoa['data_nasc']
 
     def generateMass(self, lines):
         """ Gera a quantidade de massa informada de acordo com os parâmetros """
 
         for i in range(lines):
+            self.pessoa = self.generatePeople() # Gerar uma pessoa para cada linha
             for param in self.params:
+                # Montar o dicionário self.mass com as {colunas : valores}
                 self.mass[param] = "'{}'".format(str(self.generateValue(self.params[param])))
             self.saveData()
