@@ -1,10 +1,12 @@
 #!python3
 # Autor: Renan Santana Desiderio
-import requests, random, pymysql.cursors, configparser
+import requests, random, pymysql.cursors, configparser, datetime
 from tkinter import *
 
 class DbPopulator:
 
+    rangeStart = False
+    rangeEnd = False
     params  = {} # {'column' : 'type'}
     mass    = {} # {'column' : 'value'}
     types   = [
@@ -14,6 +16,7 @@ class DbPopulator:
         'randomNumberInRange',
         'phoneNumber',
         'celNumber',
+        'cep',
         'email',
         'dateTime',
         'date',
@@ -21,7 +24,7 @@ class DbPopulator:
     ] # Lista de tipos de dados que podem ser gerados pela classe.
 
     def __init__(self):
-        """ Cria a conexão com o banco de dados """
+        """ Cria a conexão com o banco de dados. """
 
         db = self.getConfig()
 
@@ -48,7 +51,7 @@ class DbPopulator:
             print("A tabela digitada não existe no banco de dados.")
 
     def getConfig(self):
-        """ Pega os dados do config """
+        """ Pega os dados do config.ini. """
 
         config = configparser.ConfigParser()
         config.read('config.ini')
@@ -105,6 +108,12 @@ class DbPopulator:
 
         self.params[column] = type
 
+    def setRange(self, start, end):
+        """ Seta um valor inicial e um valor final, para posteriormente gerar um número dentro desta faixa. """
+
+        self.rangeStart = start
+        self.rangeEnd = end
+
     def generateValue(self, type):
         """ Recebe um tipo, e gera um valor aleatório de acordo com o mesmo. """
 
@@ -115,7 +124,11 @@ class DbPopulator:
         elif type == 'randomNumber':
             return random.randint(1, 1000)
         elif type == 'randomNumberInRange':
-            pass
+            if self.rangeStart and self.rangeEnd:
+                return random.randint(self.rangeStart, self.rangeEnd)
+            else:
+                print("Range inicial / final não configurado. Configure com a função setRange(x, y).")
+                exit()
         elif type == 'phoneNumber':
             return self.pessoa['telefone_fixo']
         elif type == 'celNumber':
@@ -123,10 +136,16 @@ class DbPopulator:
         elif type == 'email':
             return self.pessoa['email']
         elif type == 'date':
-            return self.pessoa['data_nasc']
+            return self.generateDate()
+        elif type == 'cep':
+            return self.pessoa['cep']
+        elif type == 'time':
+            return self.generateHour()
+        elif type == 'dateTime':
+            return "{} {}".format(self.generateDate(), self.generateHour())
 
     def generateMass(self, lines):
-        """ Gera a quantidade de massa informada de acordo com os parâmetros """
+        """ Gera a quantidade de massa informada de acordo com os parâmetros. """
 
         for i in range(lines):
             self.pessoa = self.generatePeople() # Gerar uma pessoa para cada linha
@@ -134,3 +153,16 @@ class DbPopulator:
                 # Montar o dicionário self.mass com as {colunas : valores}
                 self.mass[param] = "'{}'".format(str(self.generateValue(self.params[param])))
             self.saveData()
+
+    def generateHour(self):
+        """ Gera uma string com um horário aleatório. """
+
+        hora = str(random.randint(0, 23))
+        minuto = str(random.randint(0, 59))
+        return hora + ':' + minuto + ':00'
+
+    def generateDate(self):
+        """ Gera uma data aleatória já no formato 'YYYY-MM-DD'. """
+
+        data = datetime.datetime.strptime(self.pessoa['data_nasc'], '%d/%m/%Y')
+        return data.strftime('%Y-%m-%d')
