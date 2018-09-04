@@ -1,29 +1,18 @@
 Populador de banco de dados
 ===================================
 
-**Campos que podem ser usados:**
-* Nome simples
-* Nome completo
-* País
-* Estado
-* Cidade
-* Rua
-* CEP
-* Número aleatório
-* Número aleatório numa faixa de valor
-* Número aleatório com quantidades de dígitos fixos
-* Telefone
+**Tipos de dados que ele gera até o momento:**
+* Nomes simples
+* Nomes completos
+* Números aleatórios
+* Números aleatórios dentro de uma faixa de valores
+* Telefone fixo
 * Celular
+* CEP
 * E-mail
-* Palavras
-* Sentenças
-* Paráfrafos
-* Auto increment
-* DateTime
-* Date
-* Time
-* Hash
-* Números coletados em outra tabela
+* Data e hora
+* Data
+* Hora
 
 Necessário um arquivo config.ini com as seguintes informações:
 ```[db]
