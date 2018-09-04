@@ -15,7 +15,8 @@ Populador de banco de dados
 * Hora
 
 Necessário um arquivo config.ini com as seguintes informações:
-```[db]
+```
+[db]
 host=localhost
 user=root
 password=
