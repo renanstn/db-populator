@@ -6,6 +6,11 @@ def main():
 
     # Setar a tabela que será populada
     teste.setTable('usuario')
+    ids = teste.getValuesFrom('prof', 'idade')
+    # teste.setListOfValues(ids)
+    teste.setColumnType('numero', 'randomValueInList')
+    teste.generateMass(10)
+
     # Descobrir as colunas da tabela
     # colunas = teste.getColumnsOfTable()
     # [print(coluna) for coluna in colunas]
@@ -25,8 +30,8 @@ def main():
     # teste.setColumnType('celular', 'celNumber')
     # teste.setColumnType('dia_hora', 'dateTime')
     # teste.setRange(1, 5)
-    teste.setColumnType('numero', 'randomNumberInRange')
-    teste.generateMass(5)
+    # teste.setColumnType('numero', 'randomNumberInRange')
+    # teste.generateMass(5)
 
 if __name__ == '__main__':
     main()

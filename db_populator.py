@@ -5,15 +5,17 @@ from tkinter import *
 
 class DbPopulator:
 
-    rangeStart = False
-    rangeEnd = False
-    params  = {} # {'column' : 'type'}
-    mass    = {} # {'column' : 'value'}
-    types   = [
+    rangeStart  = False
+    rangeEnd    = False
+    list        = []
+    params      = {} # {'column' : 'type'}
+    mass        = {} # {'column' : 'value'}
+    types       = [
         'simpleName',
         'completeName',
         'randomNumber',
         'randomNumberInRange',
+        'randomValueInList',
         'phoneNumber',
         'celNumber',
         'cep',
@@ -38,6 +40,31 @@ class DbPopulator:
 
         self.cursor = self.conexao.cursor()
 
+    def getConfig(self):
+        """ Pega os dados do config.ini. """
+
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        return config['db']
+
+    def getColumnsOfTable(self):
+        """ Retorna um array com os nomes das colunas de uma tabela. """
+
+        sql = "SHOW COLUMNS FROM {}".format(self.table)
+        self.cursor.execute(sql)
+        result = self.cursor.fetchall()
+        colunas = [column.get('Field') for column in result]
+        return colunas
+
+    def getValuesFrom(self, table, column):
+        """ Pega todos os dados de uma determinada coluna de uma determinada tabela. """
+
+        sql = "SELECT {} FROM {}".format(column, table)
+        self.cursor.execute(sql)
+        result = self.cursor.fetchall()
+        valores = [i.get('idade') for i in result]
+        return valores
+
     def setTable(self, table):
         """ Seta uma tabela para ser populada. """
 
@@ -50,49 +77,10 @@ class DbPopulator:
         else:
             print("A tabela digitada não existe no banco de dados.")
 
-    def getConfig(self):
-        """ Pega os dados do config.ini. """
+    def setListOfValues(self, list):
+        """ Recebe e salva uma lista de valores, para posteriormente ser usada com randomValueInList """
 
-        config = configparser.ConfigParser()
-        config.read('config.ini')
-        return config['db']
-
-    def generatePeople(self):
-        """ Busca uma pessoa no 4devs e retorna um dict com ela. """
-
-        idade = random.randint(18, 90)
-        sexo  = random.choice(['H', 'M'])
-
-        pessoa = requests.post('https://www.4devs.com.br/ferramentas_online.php', data = {
-            'acao'      : 'gerar_pessoa',
-            'idade'     : idade,
-            'pontuacao' : 'S',
-            'sexo'      : sexo
-        })
-
-        return pessoa.json()
-
-    def saveData(self):
-        """ Insere os dados no banco de dados. """
-
-        listKeys = list(self.mass.keys())
-        listValues = list(self.mass.values())
-        columns = ", ".join(listKeys)
-        values = ", ".join(listValues)
-
-        sql = "INSERT INTO {} ({}) VALUES ({})".format(self.table, columns, values)
-        self.cursor.execute(sql)
-        self.conexao.commit()
-        # self.conexao.close()
-
-    def getColumnsOfTable(self):
-        """ Retorna um array com os nomes das colunas de uma tabela. """
-
-        sql = "SHOW COLUMNS FROM {}".format(self.table)
-        self.cursor.execute(sql)
-        result = self.cursor.fetchall()
-        colunas = [column.get('Field') for column in result]
-        return colunas
+        self.list = list
 
     def setColumnType(self, column, type):
         """ Seta um campo e um tipo de dado para ser preenchido na tabela. """
@@ -114,35 +102,67 @@ class DbPopulator:
         self.rangeStart = start
         self.rangeEnd = end
 
+    def generatePeople(self):
+        """ Busca uma pessoa no 4devs e retorna um dict com ela. """
+
+        idade = random.randint(18, 90)
+        sexo  = random.choice(['H', 'M'])
+
+        pessoa = requests.post('https://www.4devs.com.br/ferramentas_online.php', data = {
+            'acao'      : 'gerar_pessoa',
+            'idade'     : idade,
+            'pontuacao' : 'S',
+            'sexo'      : sexo
+        })
+
+        return pessoa.json()
+
     def generateValue(self, type):
         """ Recebe um tipo, e gera um valor aleatório de acordo com o mesmo. """
 
         if type == 'simpleName':
             return self.pessoa['nome'].split(" ")[0]
+
         elif type == 'completeName':
             return self.pessoa['nome']
+
         elif type == 'randomNumber':
             return random.randint(1, 1000)
+
         elif type == 'randomNumberInRange':
             if self.rangeStart and self.rangeEnd:
                 return random.randint(self.rangeStart, self.rangeEnd)
             else:
                 print("Range inicial / final não configurado. Configure com a função setRange(x, y).")
                 exit()
+
         elif type == 'phoneNumber':
             return self.pessoa['telefone_fixo']
+
         elif type == 'celNumber':
             return self.pessoa['celular']
+
         elif type == 'email':
             return self.pessoa['email']
+
         elif type == 'date':
             return self.generateDate()
+
         elif type == 'cep':
             return self.pessoa['cep']
+
         elif type == 'time':
             return self.generateHour()
+
         elif type == 'dateTime':
             return "{} {}".format(self.generateDate(), self.generateHour())
+
+        elif type == 'randomValueInList':
+            if len(self.list) != 0:
+                return random.choice(self.list)
+            else:
+                print("Lista vazia ou não definida. Defina uma lista com setListOfValues().")
+                exit()
 
     def generateMass(self, lines):
         """ Gera a quantidade de massa informada de acordo com os parâmetros. """
@@ -166,3 +186,16 @@ class DbPopulator:
 
         data = datetime.datetime.strptime(self.pessoa['data_nasc'], '%d/%m/%Y')
         return data.strftime('%Y-%m-%d')
+
+    def saveData(self):
+        """ Insere os dados no banco de dados. """
+
+        listKeys = list(self.mass.keys())
+        listValues = list(self.mass.values())
+        columns = ", ".join(listKeys)
+        values = ", ".join(listValues)
+
+        sql = "INSERT INTO {} ({}) VALUES ({})".format(self.table, columns, values)
+        self.cursor.execute(sql)
+        self.conexao.commit()
+        # self.conexao.close()
