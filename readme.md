@@ -3,7 +3,7 @@ Populador de banco de dados
 
 **Exemplos de uso**
 
-1 - Instanciar o db_pupulator:
+1 - Instanciar o db_populator:
 
 `db = DbPopulator()`
 
@@ -37,6 +37,8 @@ db.setColumnType('nascimento', 'date')
 * Data e hora
 * Data
 * Hora
+* RG
+* CPF
  
 Necessário um arquivo config.ini com as seguintes informações:
 ```
