@@ -111,7 +111,7 @@ class DbPopulator:
         pessoa = requests.post('https://www.4devs.com.br/ferramentas_online.php', data = {
             'acao'      : 'gerar_pessoa',
             'idade'     : idade,
-            'pontuacao' : 'S',
+            'pontuacao' : 'N',
             'sexo'      : sexo
         })
 
