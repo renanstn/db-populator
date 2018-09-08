@@ -23,6 +23,8 @@ class DbPopulator:
         'dateTime',
         'date',
         'time',
+        'rg',
+        'cpf'
     ] # Lista de tipos de dados que podem ser gerados pela classe.
 
     def __init__(self):
@@ -163,6 +165,12 @@ class DbPopulator:
             else:
                 print("Lista vazia ou não definida. Defina uma lista com setListOfValues().")
                 exit()
+
+        elif type == 'rg':
+            return self.pessoa['rg']
+
+        elif type == 'cpf':
+            return self.pessoa['cpf']
 
     def generateMass(self, lines):
         """ Gera a quantidade de massa informada de acordo com os parâmetros. """

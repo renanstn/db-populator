@@ -6,10 +6,11 @@ def main():
 
     # Setar a tabela que será populada
     teste.setTable('usuario')
-    ids = teste.getValuesFrom('prof', 'idade')
-    teste.setListOfValues(ids)
-    teste.setColumnType('numero', 'randomValueInList')
-    teste.generateMass(10)
+    # ids = teste.getValuesFrom('prof', 'idade')
+    # teste.setListOfValues(ids)
+    teste.setColumnType('email', 'cpf')
+    teste.setColumnType('nome', 'rg')
+    teste.generateMass(5)
 
     # Descobrir as colunas da tabela
     # colunas = teste.getColumnsOfTable()
