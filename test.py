@@ -7,7 +7,7 @@ def main():
     # Setar a tabela que será populada
     teste.setTable('usuario')
     ids = teste.getValuesFrom('prof', 'idade')
-    # teste.setListOfValues(ids)
+    teste.setListOfValues(ids)
     teste.setColumnType('numero', 'randomValueInList')
     teste.generateMass(10)
 
