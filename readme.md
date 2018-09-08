@@ -2,10 +2,13 @@ Populador de banco de dados
 =============================
 
 **Exemplos de uso**
+
 1 - Instanciar o db_pupulator:
+
 `db = DbPopulator()`
 
 2 - Setar a tabela que será populada:
+
 `db.setTable('usuario') `
 
 3 - Especificar a tipagem de dado que cada coluna da sua tabela irá receber:
@@ -17,6 +20,7 @@ db.setColumnType('nascimento', 'date')
 ```
 
 4- Gerar a massa.
+
 `db.generateMass(100)`
 
 **Tipos de dados que ele gera até o momento:**
