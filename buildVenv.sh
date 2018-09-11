@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Executar este script com o comando: source buildVenv.sh
 python3 -m venv .venv;
 source .venv/bin/activate;
 pip install --upgrade pip;
