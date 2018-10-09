@@ -3,7 +3,7 @@ Populador de banco de dados
 
 Primeiramente, inicializar o virtualenv com o seguinte comando:
 
-`source buildVenc.sh`
+`source buildVenv.sh`
 
 Isso irá inicializar o virtualenv assim como instalar todas as dependências necessárias.
 
