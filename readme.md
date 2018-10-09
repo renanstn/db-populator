@@ -29,7 +29,7 @@ db.setColumnType('nascimento', 'date')
 * Nomes completos: `completeName`
 * Números aleatórios: `randomNumber`
 * Números aleatórios dentro de uma faixa de valores: `randomNumberInRange`
-    - Especificar a faixa de valores com: `setRange(valor_inicial, valor_final)`
+    - Especificar a faixa de valores **antes** com: `setRange(valor_inicial, valor_final)`
 * Valores aleatórios retirados de uma coluna de uma tabela já existente:
     - Primeiro guardar os valores em uma variável com `valores = getValuesFrom(tabela, coluna)`
     - Depois usar: `setListOfValues(valores)`
