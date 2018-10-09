@@ -23,8 +23,8 @@ class DbPopulator:
         'dateTime',
         'date',
         'time',
-        'rg',
-        'cpf'
+        #'rg',
+        #'cpf'
     ] # Lista de tipos de dados que podem ser gerados pela classe.
 
     def __init__(self):
@@ -41,6 +41,10 @@ class DbPopulator:
         )
 
         self.cursor = self.conexao.cursor()
+
+    def __del__(self):
+        """ Fecha a conexão ao sair. """
+        self.conexao.close()
 
     def getConfig(self):
         """ Pega os dados do config.ini. """
@@ -110,12 +114,7 @@ class DbPopulator:
         idade = random.randint(18, 90)
         sexo  = random.choice(['H', 'M'])
 
-        pessoa = requests.post('https://www.4devs.com.br/ferramentas_online.php', data = {
-            'acao'      : 'gerar_pessoa',
-            'idade'     : idade,
-            'pontuacao' : 'N',
-            'sexo'      : sexo
-        })
+        pessoa = requests.get('https://randomuser.me/api/?nat=br')
 
         return pessoa.json()
 
@@ -123,10 +122,11 @@ class DbPopulator:
         """ Recebe um tipo, e gera um valor aleatório de acordo com o mesmo. """
 
         if type == 'simpleName':
-            return self.pessoa['nome'].split(" ")[0]
+            return self.pessoa['results'][0]['name']['first']
 
         elif type == 'completeName':
-            return self.pessoa['nome']
+            completeName = str(self.pessoa['results'][0]['name']['first']) + " " + str(self.pessoa['results'][0]['name']['last'])
+            return completeName
 
         elif type == 'randomNumber':
             return random.randint(1, 1000)
@@ -139,19 +139,19 @@ class DbPopulator:
                 exit()
 
         elif type == 'phoneNumber':
-            return self.pessoa['telefone_fixo']
+            return self.pessoa['results'][0]['phone']
 
         elif type == 'celNumber':
-            return self.pessoa['celular']
+            return self.pessoa['results'][0]['cell']
 
         elif type == 'email':
-            return self.pessoa['email']
+            return self.pessoa['results'][0]['email']
 
         elif type == 'date':
             return self.generateDate()
 
         elif type == 'cep':
-            return self.pessoa['cep']
+            return self.pessoa['results'][0]['location']['postcode']
 
         elif type == 'time':
             return self.generateHour()
@@ -166,16 +166,17 @@ class DbPopulator:
                 print("Lista vazia ou não definida. Defina uma lista com setListOfValues().")
                 exit()
 
-        elif type == 'rg':
+        """ elif type == 'rg':
             return self.pessoa['rg']
 
         elif type == 'cpf':
-            return self.pessoa['cpf']
+            return self.pessoa['cpf'] """
 
     def generateMass(self, lines):
         """ Gera a quantidade de massa informada de acordo com os parâmetros. """
 
         for i in range(lines):
+            print("Gerando linha {} de {}".format(i, lines))
             self.pessoa = self.generatePeople() # Gerar uma pessoa para cada linha
             for param in self.params:
                 # Montar o dicionário self.mass com as {colunas : valores}
@@ -192,7 +193,7 @@ class DbPopulator:
     def generateDate(self):
         """ Gera uma data aleatória já no formato 'YYYY-MM-DD'. """
 
-        data = datetime.datetime.strptime(self.pessoa['data_nasc'], '%d/%m/%Y')
+        data = datetime.datetime.strptime(self.pessoa['results'][0]['dob']['date'][0:10], '%Y-%m-%d')
         return data.strftime('%Y-%m-%d')
 
     def saveData(self):
