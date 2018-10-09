@@ -25,10 +25,11 @@ db.setColumnType('nascimento', 'date')
 
 **Tipos de dados que ele gera até o momento:**
 
-* Nomes simples
-* Nomes completos
-* Números aleatórios
-* Números aleatórios dentro de uma faixa de valores
+* Nomes simples `simpleName`
+* Nomes completos `completeName`
+* Números aleatórios `randomNumber`
+* Números aleatórios dentro de uma faixa de valores `randomNumberInRange`
+    - Especificar a faixa de valores com `setRange(valor_inicial, valor_final)`
 * Valores aleatórios retirados de uma coluna de uma tabela já existente
 * Telefone fixo
 * Celular
