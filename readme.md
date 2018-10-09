@@ -50,3 +50,5 @@ user=root
 password=
 db=teste
 ```
+
+*Este app faz consumo da API [Random User](https://randomuser.me/).*
