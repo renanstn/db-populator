@@ -33,7 +33,7 @@ db.setColumnType('nascimento', 'date')
 * Valores aleatórios retirados de uma coluna de uma tabela já existente:
     - Primeiro guardar os valores em uma variável com `valores = getValuesFrom(tabela, coluna)`
     - Depois usar: `setListOfValues(valores)`
-    - Em seguida usar o setColumnType normalmente com: `randomValueInList`
+    - Em seguida usar o setColumnType normalmente com o tipo: `randomValueInList`
 * Telefone fixo: `phoneNumber`
 * Celular: `celNumber`
 * CEP (atualmente vindo no formato americano): `cep`
