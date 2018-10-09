@@ -1,6 +1,10 @@
 Populador de banco de dados
 =============================
 
+Primeiramente, inicializar o virtualenv com o seguinte comando:
+`source buildVenc.sh`
+Isso irá inicializar o virtualenv assim como instalar todas as dependências necessárias.
+
 **Exemplos de uso**
 
 1 - Instanciar o db_populator:
