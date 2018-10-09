@@ -1,6 +1,12 @@
 Populador de banco de dados
 =============================
 
+Primeiramente, inicializar o virtualenv com o seguinte comando:
+
+`source buildVenv.sh`
+
+Isso irá inicializar o virtualenv assim como instalar todas as dependências necessárias.
+
 **Exemplos de uso**
 
 1 - Instanciar o db_populator:
@@ -29,11 +35,11 @@ db.setColumnType('nascimento', 'date')
 * Nomes completos: `completeName`
 * Números aleatórios: `randomNumber`
 * Números aleatórios dentro de uma faixa de valores: `randomNumberInRange`
-    - Especificar a faixa de valores com: `setRange(valor_inicial, valor_final)`
+    - Especificar a faixa de valores **antes** com: `setRange(valor_inicial, valor_final)`
 * Valores aleatórios retirados de uma coluna de uma tabela já existente:
     - Primeiro guardar os valores em uma variável com `valores = getValuesFrom(tabela, coluna)`
     - Depois usar: `setListOfValues(valores)`
-    - Em seguida usar o setColumnType normalmente com: `randomValueInList`
+    - Em seguida usar o setColumnType normalmente com o tipo: `randomValueInList`
 * Telefone fixo: `phoneNumber`
 * Celular: `celNumber`
 * CEP (atualmente vindo no formato americano): `cep`
@@ -50,3 +56,5 @@ user=root
 password=
 db=teste
 ```
+
+*Este app faz consumo da API: [Random User](https://randomuser.me/).*
