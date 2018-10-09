@@ -37,8 +37,6 @@ db.setColumnType('nascimento', 'date')
 * Data e hora
 * Data
 * Hora
-* RG
-* CPF
  
 Necessário um arquivo config.ini com as seguintes informações:
 ```
