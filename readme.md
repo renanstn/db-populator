@@ -61,4 +61,4 @@ Exemplo:
 
 ![exemplo](https://github.com/Doc-McCoy/db_populator/blob/master/exemplo.png)
 
-*Este app faz consumo da API: [Random User](https://randomuser.me/).*
+*Este app faz consumo da API: [Random User Generator](https://randomuser.me/).*
